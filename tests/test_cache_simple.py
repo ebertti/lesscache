@@ -1,13 +1,11 @@
 from unittest import TestCase, mock
-
-from mock import call
 from moto import mock_dynamodb2
 
 from lesscache import Cache
 from lesscache.dynamodb import create_table, get_dynamodb
 from lesscache.settings import Settings
 
-
+@mock_dynamodb2
 class TestCacheSimple(TestCase):
 
     @classmethod

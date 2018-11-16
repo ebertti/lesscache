@@ -10,6 +10,8 @@ flask = "*"
 moto = "*"
 pytest = "*"
 coverage = "*"
+twine = "*"
+urllib3 = "==1.23"
 
 [dev-packages]
 

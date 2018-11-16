@@ -3,12 +3,12 @@ from setuptools import setup, find_packages
 
 setup(
     name='lesscache',
-    version='0.1',
+    version='0.1.1',
     url='http://github.com/ebertti/lesscache/',
-    author='Estante Virtual',
+    author='Ezequiel Bertti',
     author_email='ebertti@gmail.com',
     install_requires=['boto3',],
-    packages=find_packages(exclude=('tests')),
+    packages=find_packages(include=('lesscache',)),
     include_package_data=True,
     license='MIT License',
     platforms=['OS Independent'],
@@ -19,6 +19,7 @@ setup(
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Framework :: Django',
+        'Framework :: Flask',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',

@@ -16,6 +16,7 @@ class Cache():
         self.version = settings.version
         self.key_func = settings.key_func
         self.key_prefix = settings.key_prefix
+        self.timeout = settings.timeout
 
         self.dynamodb = get_dynamodb(settings)
         self.table = get_table(settings, self.dynamodb)
@@ -25,7 +26,7 @@ class Cache():
         self.settings = settings
 
     def make_expiration(self, timeout):
-        timeout = timeout or self.settings.timeout
+        timeout = timeout or self.timeout
         timeout_d = Decimal(timeout)
         now = Decimal(time.time())
         return now + timeout_d

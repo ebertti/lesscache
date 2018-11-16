@@ -10,6 +10,10 @@ class Settings(object):
         self.timeout = 120
 
         self.table_name = 'less_cache'
+        self.version = 1
+        self.key_prefix = 'less'
+        self.key_func = lambda p, k, v: f'{p}:{k}:{v}'
+
         self.key_column = 'less_key'
         self.expiration_column = 'less_expiration'
         self.content_column = 'less_content'
@@ -18,15 +22,15 @@ class Settings(object):
         self.aws_secret_access_key = None
         self.aws_region_name = None
 
-        self.version = 1
-        self.key_prefix = 'less'
-        self.key_func = lambda p, k, v: f'{p}:{k}:{v}'
-
         self.read_capacity_units = 1
         self.write_capacity_units = 1
 
         for key, value in kwargs.items():
-            setattr(self, key, value)
+            if value is not None:
+                setattr(self, key, value)
+
+        if hasattr(self, 'key_function'):
+            self.key_func = self.module(self.key_function)
 
     def get(self, key):
         value = getattr(self, key)

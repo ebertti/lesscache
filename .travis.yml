@@ -12,13 +12,11 @@ env:
 cache: pip
 
 install:
-  - pip install "$DJANGO" pipenv
-  - pipenv lock -r > requirements.txt
-  - pip install -r requirements.txt
-  - pip install coveralls
+  - pip install "$DJANGO" pipenv coveralls
+  - pipenv install --dev --system
 
 script:
-  - coverage run --source=easy manage.py test
+  - pytest --cov-config .coveragerc --cov=lesscache --cov-report= {posargs}
 
 after_success:
   coveralls

@@ -1,0 +1,20 @@
+autodetect: true
+max-line-length: 120
+
+requirements:
+  - Pipfile
+
+uses:
+    - django
+    - flask
+
+ignore-paths:
+    - docs
+    - tests
+
+pylint:
+    disable:
+    - R0913
+    
+python-targets:
+  - 3

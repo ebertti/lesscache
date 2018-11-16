@@ -46,18 +46,19 @@ Installation
 
 **pip**
 
-    ``pip install lesscache``
+``pip install lesscache``
     
 **pipenv**
 
-    ``pipenv install lesscache``
+``pipenv install lesscache``
 
-Setup
------
+Setup on Django
+---------------
 
 On Django Settings
 
 .. code-block:: python
+
     instaled_apps = [
         ...
         'lesscache.compact.django'
@@ -65,12 +66,30 @@ On Django Settings
 
     CACHES = {
         'default': {
-            'BACKEND': 'lesscache.compact.django.cache.DjangoCache',
+            'BACKEND': 'lesscache.compact.django.cache.DjangoCacheDynamodb',
+            'TIMEOUT': 120  # default 120 seconds == 2minutes
+            'KEY_PREFIX': 'less'  # default less
+            'VERSION': 1  # default 1
+            'KEY_FUNCTION': 'path.to.function' # f'{prefix}:{key}:{version}'
+
+            'OPTIONS': {
+                'aws_access_key_id': None       # need only if you dont have login
+                'aws_secret_access_key': None   # on aws-cli with your key
+                'aws_region_name': None         # or not in aws lambda
+
+                'read_capacity_units': 1
+                'write_capacity_units': 1
+                'encode': 'path.to.encode'  # default: 'lesscache.encode.PickleEncode
+            }
         }
     }
 
 
 Run manage command to create cache table on Dynamodb before using
 
-    ``python manage.py create_dynamodb_cache``
+``python manage.py create_dynamodb_cache``
 
+Setup on Flask
+--------------
+
+**WIP**
