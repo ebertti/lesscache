@@ -7,13 +7,14 @@ name = "pypi"
 django = "*"
 flask = "*"
 "boto3" = "*"
-moto = "*"
-pytest = "*"
-coverage = "*"
 twine = "*"
 urllib3 = "==1.23"
 
 [dev-packages]
+black = "==18.9b0"
+pytest = "*"
+coverage = "*"
+moto = "*"
 
 [requires]
 python_version = "3.6"
