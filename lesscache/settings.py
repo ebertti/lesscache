@@ -2,21 +2,21 @@ from lesscache.helper import import_string
 
 MEMCACHE_MAX_KEY_LENGTH = 250
 
-class Settings(object):
 
+class Settings(object):
     def __init__(self, **kwargs):
         # defaults
-        self.encode = 'lesscache.encode.PickleEncode'
+        self.encode = "lesscache.encode.PickleEncode"
         self.timeout = 120
 
-        self.table_name = 'less_cache'
+        self.table_name = "less_cache"
         self.version = 1
-        self.key_prefix = 'less'
-        self.key_func = lambda p, k, v: f'{p}:{k}:{v}'
+        self.key_prefix = "less"
+        self.key_func = lambda p, k, v: f"{p}:{k}:{v}"
 
-        self.key_column = 'less_key'
-        self.expiration_column = 'less_expiration'
-        self.content_column = 'less_content'
+        self.key_column = "less_key"
+        self.expiration_column = "less_expiration"
+        self.content_column = "less_content"
 
         self.aws_access_key_id = None
         self.aws_secret_access_key = None
@@ -29,13 +29,13 @@ class Settings(object):
             if value is not None:
                 setattr(self, key, value)
 
-        if hasattr(self, 'key_function'):
+        if hasattr(self, "key_function"):
             self.key_func = self.module(self.key_function)
 
     def get(self, key):
         value = getattr(self, key)
         if not value:
-            raise AttributeError('Key %s not exists in settings', key)
+            raise AttributeError("Key %s not exists in settings", key)
 
         return value
 
@@ -49,6 +49,3 @@ class Settings(object):
 
     def __getitem__(self, key):
         return self.get(key)
-
-
-

@@ -9,8 +9,8 @@ from lesscache.helper import logger
 from .settings import MEMCACHE_MAX_KEY_LENGTH
 from .exceptions import CacheKeyWarning
 
-class Cache():
 
+class Cache:
     def __init__(self, settings):
 
         self.version = settings.version
@@ -21,7 +21,7 @@ class Cache():
         self.dynamodb = get_dynamodb(settings)
         self.table = get_table(settings, self.dynamodb)
 
-        self.encode = settings.module('encode')
+        self.encode = settings.module("encode")
 
         self.settings = settings
 
@@ -64,13 +64,21 @@ class Cache():
 
         response = self.table.get_item(Key={self.settings.key_column: key})
 
-        if not 'Item' in response:
-            logger.debug('Get EMPTY value for "%s" on dynamodb "%s" table', key, self.table.table_name)
+        if not "Item" in response:
+            logger.debug(
+                'Get EMPTY value for "%s" on dynamodb "%s" table',
+                key,
+                self.table.table_name,
+            )
             return default
 
-        item = response['Item']
+        item = response["Item"]
         if item[self.settings.expiration_column] < self.make_expiration(1):
-            logger.debug('Get EXPIRED value for "%s" on dynamodb "%s" table', key, self.table.table_name)
+            logger.debug(
+                'Get EXPIRED value for "%s" on dynamodb "%s" table',
+                key,
+                self.table.table_name,
+            )
             return default
 
         value = item[self.settings.content_column]
@@ -92,38 +100,36 @@ class Cache():
         table = batch or self.table
 
         if create:
-            response = table.put_item(
-                Item=self.make_item(key, expiration, value)
-            )
+            response = table.put_item(Item=self.make_item(key, expiration, value))
         else:
             response = table.update_item(
-                Key={
-                    self.settings.key_column: key
-                },
-                UpdateExpression=f'SET {self.settings.expiration_column} = :ex,  {self.settings.content_column} = :vl',
-                ExpressionAttributeValues={
-                    ':ex': expiration,
-                    ':vl': value
-                }
+                Key={self.settings.key_column: key},
+                UpdateExpression=f"SET {self.settings.expiration_column} = :ex,  {self.settings.content_column} = :vl",
+                ExpressionAttributeValues={":ex": expiration, ":vl": value},
             )
 
-        logger.debug('Set "%s" with "%s" timout on dynamodb "%s" table', key, timeout, self.table.table_name)
-
+        logger.debug(
+            'Set "%s" with "%s" timout on dynamodb "%s" table',
+            key,
+            timeout,
+            self.table.table_name,
+        )
 
     def touch(self, key, timeout=None, version=None):
         key = self.make_key(key, version=version)
         self.validate_key(key)
         expiration = self.make_expiration(timeout)
         item = self.table.update_item(
-            Key={
-                self.settings.key_column: key,
-            },
-            UpdateExpression=f'SET {self.settings.expiration_column} = :ex',
-            ExpressionAttributeValues={
-                ':ex': expiration
-            }
+            Key={self.settings.key_column: key},
+            UpdateExpression=f"SET {self.settings.expiration_column} = :ex",
+            ExpressionAttributeValues={":ex": expiration},
         )
-        logger.debug('Reset expiration "%s" to %s on dynamodb "%s" table', key, timeout, self.table.table_name)
+        logger.debug(
+            'Reset expiration "%s" to %s on dynamodb "%s" table',
+            key,
+            timeout,
+            self.table.table_name,
+        )
         return item
 
     def delete(self, key, version=None, batch=None):
@@ -132,13 +138,8 @@ class Cache():
 
         table = batch or self.table
 
-        table.delete_item(
-            Key={
-                self.settings.key_column: key,
-            }
-        )
-        logger.debug('Delete %s on dynamodb %s table', key, self.settings.table_name)
-
+        table.delete_item(Key={self.settings.key_column: key})
+        logger.debug("Delete %s on dynamodb %s table", key, self.settings.table_name)
 
     def delete_many(self, keys, version=None):
         """
@@ -166,18 +167,15 @@ class Cache():
                 self.set(key, value, timeout=timeout, version=version, batch=batch)
         return []
 
-
     def has_key(self, key, version=None):
         key = self.make_key(key, version)
 
         response = self.table.get_item(
-            Key={
-                self.settings.key_column: key,
-            },
-            ReturnConsumedCapacity='NONE',
+            Key={self.settings.key_column: key},
+            ReturnConsumedCapacity="NONE",
             # ProjectionExpression=self.settings.key_column,
         )
-        return 'Item' in response
+        return "Item" in response
 
     def clear(self):
         warnings.warn("Clean is not supported yet.")
@@ -256,14 +254,16 @@ class Cache():
         """
         if len(key) > MEMCACHE_MAX_KEY_LENGTH:
             warnings.warn(
-                'Cache key will cause errors if used with memcached: %r '
-                '(longer than %s)' % (key, MEMCACHE_MAX_KEY_LENGTH), CacheKeyWarning
+                "Cache key will cause errors if used with memcached: %r "
+                "(longer than %s)" % (key, MEMCACHE_MAX_KEY_LENGTH),
+                CacheKeyWarning,
             )
         for char in key:
             if ord(char) < 33 or ord(char) == 127:
                 warnings.warn(
-                    'Cache key contains characters that will cause errors if '
-                    'used with memcached: %r' % key, CacheKeyWarning
+                    "Cache key contains characters that will cause errors if "
+                    "used with memcached: %r" % key,
+                    CacheKeyWarning,
                 )
                 break
 
@@ -290,13 +290,8 @@ class Cache():
         """
         return self.incr_version(key, -delta, version)
 
-
     def close(self, **kwargs):
         """Close the cache connection"""
-        logger.info('Close connection with %s table', self.table.table_name)
-
+        logger.info("Close connection with %s table", self.table.table_name)
 
     # endregion
-
-
-

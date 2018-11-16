@@ -1,15 +1,20 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
+
 class Command(BaseCommand):
-    help = 'Create dynamodb cache tables'
+    help = "Create dynamodb cache tables"
 
     def add_arguments(self, parser):
-        parser.add_argument('caches', nargs='+', type=str, )
+        parser.add_argument("caches", nargs="+", type=str)
 
     def handle(self, *args, **options):
-        for cache_name in options['caches']:
+        for cache_name in options["caches"]:
 
-            table = 'nada'
+            table = "nada"
 
-            self.stdout.write(self.style.SUCCESS(f'Cache table {table} created for cache {cache_name}'))
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Cache table {table} created for cache {cache_name}"
+                )
+            )

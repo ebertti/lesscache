@@ -1,7 +1,4 @@
-
-
-class BaseEncode():
-
+class BaseEncode:
     @classmethod
     def dumps(cls, value):
         raise NotImplementedError

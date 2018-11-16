@@ -93,3 +93,9 @@ Setup on Flask
 --------------
 
 **WIP**
+
+
+How to contribute
+-----------------
+
+**WIP**
