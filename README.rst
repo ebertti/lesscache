@@ -37,9 +37,6 @@ Working with: AWS Dynamodb
 .. image:: https://img.shields.io/codeclimate/github/ebertti/lesscache.svg
   :target: https://codeclimate.com/github/ebertti/lesscache
 
-.. image:: https://landscape.io/github/ebertti/lesscache/master/landscape.png?style=flat
-  :target: https://landscape.io/github/ebertti/lesscache/master
-
 
 Installation
 ------------
